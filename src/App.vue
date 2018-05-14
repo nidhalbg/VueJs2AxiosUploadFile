@@ -5,6 +5,7 @@
         <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
       </label>
         <button v-on:click="submitFile()">Submit</button>
+        <button @click="getTest()">get</button>
     </div>
   </div>
 </template>
@@ -12,7 +13,7 @@
 <script>
 
   import axios from 'axios';      
-
+  //import jQuery from 'jquery'
   
   export default {
     /*
@@ -25,6 +26,16 @@
     },
 
     methods: {
+      getTest(){
+        console.dir("dsfsd");
+        axios.get('https://witty-pig-71.localtunnel.me/api/test')
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      },
       /*
         Submits the file to the server
       */
@@ -37,8 +48,10 @@
         /*
             Add the form data we need to submit
         */
-        formData.append('file', this.file);
-        let medias = new Array({'post_detail_id' : 3106, 'media_type' : 1, 'media_file' : formData});
+        //formData.append('file', this.file);
+        let medias = new Array({'post_detail_id' : 27, 'media_type' : 1, 'media_file' : 'gddfgf'});
+
+        console.log(this.file);
         // var medias = new Array();
         // medias[0]['post_detail_id'] = 3106;
         // medias[0][media_type] = 1;
@@ -48,28 +61,28 @@
           Make the request to the POST /single-file URL
         */
         //axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-        let token = 'your_token';
+        let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlzcyI6Imh0dHA6Ly90YXNrZXItcHJldmlldy5jb20vYXBpL2F1dGgiLCJpYXQiOjE1MTkwMjk5NDIsImV4cCI6MzI2MDg1Mzk0MiwibmJmIjoxNTE5MDI5OTQyLCJqdGkiOiJzS1QzejU4enlxY21iNGs1In0.scgCrY7FQudwOEwKPCp2JxXm9PxfIG2gfJGZ2Av0Xog';
 
-        axios.post( '/url',
+        axios.post( 'http://tasker-preview.com/api/upload_media_v2',
           {
               headers: {
-                'Content-Type': 'multipart/form-data',
+                //'Content-Type': 'multipart/form-data',
                 'Authorization': "bearer" + token,
-                'Access-Control-Allow-Origin': '*'
               },
-              body: JSON.stringify({
+              data: JSON.stringify({
                   'medias' : medias
               }),
+              //crossdomain: true,
 
           }
-        ).then(function(data){
-          console.log('SUCCESS!!');
-          console.log(data);          
-        })
-        .catch(function(err){
-          console.log('FAILURE!!');
-          console.log(err);          
-        });
+        ).then(response => {
+                    console.log(response.data);                    
+                    console.log("success");
+                    //location.reload();
+                })
+          .catch(e => {
+              console.log(e.response);              
+          });
       },
 
       /*
